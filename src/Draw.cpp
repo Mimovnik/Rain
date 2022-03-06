@@ -2,15 +2,16 @@
 #define DRAW_CPP
 
 #include <SDL.h>
+
 #include <iostream>
 
 void DrawPixel(SDL_Surface* surface, int x, int y, Uint32 color) {
-    if(y >= 0 && y <= surface->h){
-    SDL_LockSurface(surface);
-    int bpp = surface->format->BytesPerPixel;
-    Uint8* p = (Uint8*)surface->pixels + y * surface->pitch + x * bpp;
-    *(Uint32*)p = color;
-    SDL_UnlockSurface(surface);
+    if (y >= 0 && y <= surface->h) {
+        SDL_LockSurface(surface);
+        int bpp = surface->format->BytesPerPixel;
+        Uint8* p = (Uint8*)surface->pixels + y * surface->pitch + x * bpp;
+        *(Uint32*)p = color;
+        SDL_UnlockSurface(surface);
     }
 };
 
