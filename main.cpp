@@ -13,7 +13,7 @@ int main(int argc, char* argv[]) {
     SDL_Event event;
     SDL_Surface* screen = nullptr;
     bool running = true;
-    const int dropletCount = 128;
+    const int dropletCount = 256;
     Droplet droplets[dropletCount];
 
     screen =
@@ -23,6 +23,8 @@ int main(int argc, char* argv[]) {
     int blue = SDL_MapRGB(screen->format, 56, 185, 208);
 
     srand(static_cast<unsigned int>(time(NULL)));
+    Uint32 last = SDL_GetTicks();
+    float gameTimeFactor = 10.0f;
 
     while (running) {
         Uint64 start = SDL_GetPerformanceCounter();
@@ -36,9 +38,13 @@ int main(int argc, char* argv[]) {
             }
         }
         // change gamestate
+        Uint32 current = SDL_GetTicks();
+        float dT = (current - last) / gameTimeFactor;
+        
         for (int i = 0; i < dropletCount; i++) {
-            droplets[i].move(1);
+            droplets[i].move(dT);
         }
+        last = current;
         // display
         SDL_FillRect(screen, NULL, black);
         for (int i = 0; i < dropletCount; i++) {

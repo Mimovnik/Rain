@@ -11,8 +11,6 @@ void DrawPixel(SDL_Surface* surface, int x, int y, Uint32 color) {
     Uint8* p = (Uint8*)surface->pixels + y * surface->pitch + x * bpp;
     *(Uint32*)p = color;
     SDL_UnlockSurface(surface);
-    } else {
-        std::cout << "Cannot draw pixel outside of surface\n";
     }
 };
 
