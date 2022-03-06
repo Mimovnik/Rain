@@ -14,6 +14,11 @@ class Droplet {
     int width;
     double yVelocity;
 
+    static int dropletCount;
+    static int dropletsInitialized;
+    static const double maxVel;
+    static const double minVel;
+
     int map(double value, double maxValue, int wantedMinValue,
             int wantedMaxValue) {
         double rounded =
@@ -28,31 +33,41 @@ class Droplet {
                wantedMinValue;
     }
 
+    int distribute(int arg){
+        int a = Droplet::dropletCount;
+        int x = arg;
+        int value = (x*x/a);
+        return value;
+    }
+
    public:
-    static const double maxVel;
-    static const double minVel;
+
+    static void setDropletCount(const int dropletCount){
+        Droplet::dropletCount = dropletCount;
+    }
 
     Droplet() {
+        Droplet::dropletsInitialized++;
         this->x = rand() % 640;
         this->y = rand() % 1000 - 500;
-        this->z = rand() % 100;
+        this->z = distribute(Droplet::dropletsInitialized);
         int minWidth = 1;
         int maxWidth = 3;
-        this->width = map(z, 99, minWidth, maxWidth);
-        int minLen = 10;
+        this->width = map(z, Droplet::dropletCount, minWidth, maxWidth);
+        int minLen = 8;
         int maxLen = 20;
-        this->length = map(z, 99, minLen, maxLen);
-        this->yVelocity = map(z, 99, minVel, maxVel);
+        this->length = map(z, Droplet::dropletCount, minLen, maxLen);
+        this->yVelocity = map(z, Droplet::dropletCount, minVel, maxVel);
     }
 
     void move(double deltaTime) {
         y += yVelocity * deltaTime;
-        double gravity = map(z, 99, 0.0, 0.1);
+        double gravity = map(z, Droplet::dropletCount, 0.0, 0.1);
         yVelocity += gravity * deltaTime;
         if (y > 480) {
             x = rand() % 640;
             y = rand() % 500 - 500;
-            yVelocity = map(z, 99, minVel, maxVel);
+            yVelocity = map(z, Droplet::dropletCount, minVel, maxVel);
         }
     }
 
@@ -63,6 +78,8 @@ class Droplet {
 };
 
 const double Droplet::minVel = 3;
-const double Droplet::maxVel = 5;
+const double Droplet::maxVel = 4;
+int Droplet::dropletsInitialized = 0;
+int Droplet::dropletCount = 0;
 
 #endif

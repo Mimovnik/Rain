@@ -13,7 +13,8 @@ int main(int argc, char* argv[]) {
     SDL_Event event;
     SDL_Surface* screen = nullptr;
     bool running = true;
-    const int dropletCount = 256;
+    const int dropletCount = 512;
+    Droplet::setDropletCount(dropletCount);
     Droplet droplets[dropletCount];
 
     screen =
@@ -102,7 +103,7 @@ int main(int argc, char* argv[]) {
         Uint64 end = SDL_GetPerformanceCounter();
 
         float elapsed = (end - start) / (float)SDL_GetPerformanceFrequency();
-        // std::cout << "Current FPS: " << 1.0f / elapsed << std::endl;
+        std::cout << "Current FPS: " << 1.0f / elapsed << std::endl;
     }
     return 0;
 }
