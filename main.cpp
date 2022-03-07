@@ -9,17 +9,18 @@
 int main(int argc, char* argv[]) {
     const int windowWidth = 640;
     const int windowHeigth = 480;
-    Framework fw(windowWidth, windowHeigth);
+    Display display(windowWidth, windowHeigth);
+    Sound ambient("../audio/rainLoop.wav");
     SDL_Event event;
     SDL_Surface* screen = nullptr;
     bool running = true;
-    const int dropletCount = 512;
+    const int dropletCount = 1024;
     Droplet::setDropletCount(dropletCount);
     Droplet droplets[dropletCount];
 
     screen =
-        SDL_CreateRGBSurface(0, fw.getWidth(), fw.getHeight(), 32, 0x00FF0000,
-                             0x0000FF00, 0x000000FF, 0xFF000000);
+        SDL_CreateRGBSurface(0, display.getWidth(), display.getHeight(), 32,
+                             0x00FF0000, 0x0000FF00, 0x000000FF, 0xFF000000);
 
     const int black = SDL_MapRGB(screen->format, 0, 0, 0);
     const int white = SDL_MapRGB(screen->format, 255, 255, 255);
@@ -43,6 +44,8 @@ int main(int argc, char* argv[]) {
     srand(static_cast<unsigned int>(time(NULL)));
     Uint32 last = SDL_GetTicks();
     float gameTimeFactor = 10.0f;
+
+    ambient.play();    
 
     while (running) {
         Uint64 start = SDL_GetPerformanceCounter();
@@ -92,18 +95,19 @@ int main(int argc, char* argv[]) {
             droplets[i].move(dT);
         }
         last = current;
-        // display
+        // output display and audio
         SDL_FillRect(screen, NULL, backgroundColor);
         for (int i = 0; i < dropletCount; i++) {
             droplets[i].draw(screen, rainColor);
         }
-        fw.update(screen);
+        display.update(screen);
+        ambient.loop();
 
         // fps
         Uint64 end = SDL_GetPerformanceCounter();
 
         float elapsed = (end - start) / (float)SDL_GetPerformanceFrequency();
-        std::cout << "Current FPS: " << 1.0f / elapsed << std::endl;
+        // std::cout << "Current FPS: " << 1.0f / elapsed << std::endl;
     }
     return 0;
 }

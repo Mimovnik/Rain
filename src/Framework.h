@@ -2,7 +2,9 @@
 #define FRAMEWORK_H
 
 #include <SDL.h>
-class Framework {
+
+#include <iostream>
+class Display {
     int width;
     int height;
     SDL_Window* window = nullptr;
@@ -10,7 +12,7 @@ class Framework {
     SDL_Renderer* renderer = nullptr;
 
    public:
-    Framework(int width_, int height_) : width(width_), height(height_) {
+    Display(int width_, int height_) : width(width_), height(height_) {
         this->width = width;
         this->height = height;
         SDL_Init(SDL_INIT_EVERYTHING);
@@ -25,7 +27,7 @@ class Framework {
         SDL_RenderPresent(renderer);
     }
 
-    ~Framework() {
+    ~Display() {
         SDL_DestroyTexture(screenTexture);
         SDL_DestroyRenderer(renderer);
         SDL_DestroyWindow(window);
@@ -43,6 +45,50 @@ class Framework {
 
     int getWidth() { return width; }
     int getHeight() { return height; }
+};
+
+class Sound {
+    SDL_AudioSpec wavSpec;
+    Uint32 wavLength;
+    Uint8* wavBuffer;
+    SDL_AudioDeviceID deviceId;
+    int status;
+
+   public:
+    Sound(const char* fileName) {
+        if(SDL_LoadWAV(fileName, &wavSpec, &wavBuffer, &wavLength) == nullptr){
+            std::cerr << "Audio load error:\n"
+                      << SDL_GetError() << std::endl;
+        }
+        deviceId = SDL_OpenAudioDevice(nullptr, 0, &wavSpec, nullptr,
+                                       0);
+        if (deviceId == 0) {
+            std::cerr << "Open audio device error:\n"
+                      << SDL_GetError() << std::endl;
+        }
+    }
+    ~Sound() {
+        SDL_CloseAudioDevice(deviceId);
+        SDL_FreeWAV(wavBuffer);
+    }
+    void play() {
+        status = SDL_QueueAudio(deviceId, wavBuffer, wavLength);
+        if(status!=0){
+            std::cerr << "Queue audio error:\n"
+                      << SDL_GetError() << std::endl;
+        }
+        SDL_PauseAudioDevice(deviceId, 0);
+    }
+
+    void loop(){
+        if(SDL_GetQueuedAudioSize(deviceId)<=wavLength){
+            play();
+        }
+    }
+
+    void stop(){
+        SDL_PauseAudioDevice(deviceId, 1);
+    }
 };
 
 #endif

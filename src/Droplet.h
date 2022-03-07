@@ -62,7 +62,7 @@ class Droplet {
 
     void move(double deltaTime) {
         y += yVelocity * deltaTime;
-        double gravity = map(z, Droplet::dropletCount, 0.0, 0.1);
+        double gravity = map(z, Droplet::dropletCount, 0.01, 0.1);
         yVelocity += gravity * deltaTime;
         if (y > 480) {
             x = rand() % 640;
@@ -77,8 +77,8 @@ class Droplet {
     }
 };
 
-const double Droplet::minVel = 3;
-const double Droplet::maxVel = 4;
+const double Droplet::minVel = 4;
+const double Droplet::maxVel = 5;
 int Droplet::dropletsInitialized = 0;
 int Droplet::dropletCount = 0;
 
