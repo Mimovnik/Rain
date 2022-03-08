@@ -27,15 +27,15 @@ int main(int argc, char* argv[]) {
     const int blue = SDL_MapRGB(screen->format, 0, 121, 255);
     const int lightPurple = SDL_MapRGB(screen->format, 230, 230, 250);
     const int purple = SDL_MapRGB(screen->format, 148, 43, 226);
-    const int green = SDL_MapRGB(screen->format, 9, 164, 0);
+    const int green = SDL_MapRGB(screen->format, 42, 93, 0);
     const int lightGreen = SDL_MapRGB(screen->format, 204, 255, 202);
-    const int orange = SDL_MapRGB(screen->format, 255, 122, 0);
-    const int lightOrange = SDL_MapRGB(screen->format, 255, 236, 191);
+    const int darkRed = SDL_MapRGB(screen->format, 116, 14, 14);
+    const int lightRed = SDL_MapRGB(screen->format, 255, 177, 177);
 
     const int colorCount = 4;
-    const int rainColors[colorCount] = {blue, purple, green, orange};
+    const int rainColors[colorCount] = {blue, purple, green, darkRed};
     const int backColors[colorCount] = {white, lightPurple, lightGreen,
-                                        lightOrange};
+                                        lightRed};
 
     int rainColor = rainColors[0];
     int backgroundColor = backColors[0];
@@ -75,7 +75,7 @@ int main(int argc, char* argv[]) {
                     if (keySym == SDLK_g) {
                         currentColors = 2;
                     }
-                    if (keySym == SDLK_o) {
+                    if (keySym == SDLK_r) {
                         currentColors = 3;
                     }
                     if (keySym == SDLK_SPACE) {
